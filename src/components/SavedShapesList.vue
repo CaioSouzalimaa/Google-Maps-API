@@ -27,7 +27,7 @@ const initializeMiniMap = (element, shape) => {
 
   const miniMap = new google.maps.Map(element, {
     center: { lat: -23.55052, lng: -46.633308 },
-    zoom: 12,
+    zoom: 10,
     disableDefaultUI: true,
   });
 

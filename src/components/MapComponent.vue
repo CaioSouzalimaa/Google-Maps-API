@@ -1,7 +1,12 @@
 <template>
   <div id="map" ref="map" style="width: 100%; height: 500px;"></div>
-  <button @click="saveShapes">Salvar Formas</button>
-  <button @click="clearMap">Limpar Mapa</button>
+  <div class="controls">
+    <button @click="startDrawing('circle')">Desenhar Círculo</button>
+    <button @click="startDrawing('rectangle')">Desenhar Retângulo</button>
+    <button @click="startDrawing('polygon')">Desenhar Polígono</button>
+    <button @click="saveShapes">Salvar Formas</button>
+    <button @click="clearMap">Limpar Mapa</button>
+  </div>
   <SavedShapesList @plot-shape="plotShapeOnMap" @delete-shape="deleteShapeFromStore" />
 </template>
 
@@ -13,11 +18,11 @@ import SavedShapesList from './SavedShapesList.vue';
 const map = ref(null);
 const mapShapesStore = useMapShapesStore();
 const drawnShapes = ref([]);
+let drawingManager = null;
 
 const makeMovableAndEditable = (overlay) => {
   overlay.setDraggable(true);
   overlay.setEditable(true);
-  google.maps.event.addListener(overlay, 'click', () => overlay.setEditable(!overlay.getEditable()));
 };
 
 const extractShapeData = (event) => {
@@ -44,7 +49,7 @@ onMounted(() => {
     zoom: 12,
   });
 
-  const drawingManager = new google.maps.drawing.DrawingManager({
+  drawingManager = new google.maps.drawing.DrawingManager({
     drawingControl: true,
     drawingControlOptions: {
       position: google.maps.ControlPosition.TOP_CENTER,
@@ -61,6 +66,10 @@ onMounted(() => {
     drawingManager.setDrawingMode(null);
   });
 });
+
+const startDrawing = (shapeType) => {
+  drawingManager.setDrawingMode(google.maps.drawing.OverlayType[shapeType.toUpperCase()]);
+};
 
 const saveShapes = () => {
   drawnShapes.value.forEach(shape => {
@@ -119,5 +128,11 @@ const deleteShapeFromStore = (index) => {
 #map {
   width: 100%;
   height: 500px;
+}
+.controls {
+  margin-top: 10px;
+}
+.controls button {
+  margin: 5px;
 }
 </style>
