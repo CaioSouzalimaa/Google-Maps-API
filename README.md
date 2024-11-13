@@ -1,29 +1,19 @@
-# google-maps-api
+## Como rodar o projeto
 
-This template should help get you started developing with Vue 3 in Vite.
+**Clone o repositório**:
+ ```bash
+ git clone git@github.com:CaioSouzalimaa/google-maps-api.git
+```
 
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
+**Após Clonar o repositório acesse a pasta**
+```bash
+cd google-maps-api
+```
+**Instale os pacotes:**
+```
 npm install
 ```
-
-### Compile and Hot-Reload for Development
-
+**Por fim execute o código**
 ```sh
 npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
 ```
