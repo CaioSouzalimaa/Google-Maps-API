@@ -1,8 +1,10 @@
 <template>
  <div class="container">
-    <Tools @start-drawing="startDrawing" @save-shapes="saveShapes" @clear-map="clearMap"/>
+    <div class="map-tools">
+      <Tools @start-drawing="startDrawing" @save-shapes="saveShapes" @clear-map="clearMap"/>
+      <SavedShapesList @plot-shape="plotShapeOnMap" @delete-shape="deleteShapeFromStore" />
+    </div>
     <div class="map" id="map" ref="map"></div>
-    <SavedShapesList @plot-shape="plotShapeOnMap" @delete-shape="deleteShapeFromStore" />
  </div>
 </template>
 
@@ -124,21 +126,25 @@ const deleteShapeFromStore = (index) => {
 };
 </script>
 
-<style>
+<style scoped>
 .container{
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  justify-content: space-between;
   width: 100%;
+  height: 100vh;
 }
 
 .map-tools{
   display: flex;
-  justify-content: space-between;
+  width: 30%;
+  padding: 10px;
+  flex-direction: column;
+  overflow-y: scroll;
+  gap: 10px;
 }
 
 .map {
-  width: 100%;
-  height: 500px;
+  width: 70%;
+  height: 100%;
 }
 </style>

@@ -35,6 +35,7 @@ const handleClick = (event) => {
   border-radius: 5px;
   background-color: #F4F4F5;
   cursor: pointer;
+  padding: 10px;
 }
 
 .button-container{

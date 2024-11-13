@@ -47,7 +47,7 @@ const clearMap = () => {
 };
 </script>
 
-<style>
+<style scoped>
 .tools{
   display: flex;
   flex-direction: column;
