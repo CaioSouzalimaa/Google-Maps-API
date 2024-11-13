@@ -1,28 +1,26 @@
 <template>
-  <div id="map" ref="map" style="width: 100%; height: 500px;"></div>
-  <div class="controls">
-    <button @click="startDrawing('circle')">Desenhar Círculo</button>
-    <button @click="startDrawing('rectangle')">Desenhar Retângulo</button>
-    <button @click="startDrawing('polygon')">Desenhar Polígono</button>
-    <button @click="saveShapes">Salvar Formas</button>
-    <button @click="clearMap">Limpar Mapa</button>
-  </div>
-  <SavedShapesList @plot-shape="plotShapeOnMap" @delete-shape="deleteShapeFromStore" />
+ <div class="container">
+    <Tools @start-drawing="startDrawing" @save-shapes="saveShapes" @clear-map="clearMap"/>
+    <div class="map" id="map" ref="map"></div>
+    <SavedShapesList @plot-shape="plotShapeOnMap" @delete-shape="deleteShapeFromStore" />
+ </div>
 </template>
 
 <script setup>
 import { onMounted, ref } from 'vue';
 import { useMapShapesStore } from '@/stores/mapShapes';
 import SavedShapesList from './SavedShapesList.vue';
+import Tools from './Tools.vue';
 
 const map = ref(null);
 const mapShapesStore = useMapShapesStore();
 const drawnShapes = ref([]);
-let drawingManager = null;
+const drawingManager = ref(null);
 
 const makeMovableAndEditable = (overlay) => {
   overlay.setDraggable(true);
   overlay.setEditable(true);
+  google.maps.event.addListener(overlay, 'click', () => overlay.setEditable(!overlay.getEditable()));
 };
 
 const extractShapeData = (event) => {
@@ -49,26 +47,28 @@ onMounted(() => {
     zoom: 12,
   });
 
-  drawingManager = new google.maps.drawing.DrawingManager({
+  drawingManager.value = new google.maps.drawing.DrawingManager({
     drawingControl: true,
     drawingControlOptions: {
       position: google.maps.ControlPosition.TOP_CENTER,
       drawingModes: ['circle', 'polygon', 'rectangle'],
     },
   });
-  drawingManager.setMap(map.value);
 
-  google.maps.event.addListener(drawingManager, 'overlaycomplete', (event) => {
+  drawingManager.value.setMap(map.value);
+
+  google.maps.event.addListener(drawingManager.value, 'overlaycomplete', (event) => {
     const shapeData = extractShapeData(event);
     const overlay = event.overlay;
     makeMovableAndEditable(overlay);
     drawnShapes.value.push({ ...shapeData, overlay: overlay });
-    drawingManager.setDrawingMode(null);
+    drawingManager.value.setDrawingMode(null);
   });
 });
 
 const startDrawing = (shapeType) => {
-  drawingManager.setDrawingMode(google.maps.drawing.OverlayType[shapeType.toUpperCase()]);
+  clearMap();
+  drawingManager.value.setDrawingMode(google.maps.drawing.OverlayType[shapeType.toUpperCase()]);
 };
 
 const saveShapes = () => {
@@ -87,7 +87,7 @@ const clearMap = () => {
 };
 
 const plotShapeOnMap = (shape) => {
-  clearMap();
+  clearMap();  // Limpar antes de adicionar a nova forma
   let overlay;
   if (shape.type === 'circle') {
     overlay = new google.maps.Circle({
@@ -125,14 +125,20 @@ const deleteShapeFromStore = (index) => {
 </script>
 
 <style>
-#map {
+.container{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.map-tools{
+  display: flex;
+  justify-content: space-between;
+}
+
+.map {
   width: 100%;
   height: 500px;
-}
-.controls {
-  margin-top: 10px;
-}
-.controls button {
-  margin: 5px;
 }
 </style>

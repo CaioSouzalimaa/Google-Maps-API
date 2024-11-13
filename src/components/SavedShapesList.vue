@@ -2,11 +2,9 @@
   <div>
     <h2>Formas Salvas</h2>
     <ul>
-      <li v-for="(shape, index) in savedShapes" :key="shape.name">
-        <p><strong>Nome:</strong> {{ shape.name }}</p>
+      <li v-for="(shape, index) in savedShapes">
         <div class="mini-map" :ref="el => initializeMiniMap(el, shape)"></div>
         <button @click="plotShape(shape)">Exibir no Mapa Principal</button>
-        <button @click="editShape(index)">Editar Forma</button>
         <button @click="deleteShape(index)">Excluir Forma</button>
       </li>
     </ul>
@@ -59,16 +57,6 @@ const initializeMiniMap = (element, shape) => {
 
 const plotShape = (shape) => {
   emit('plot-shape', shape);
-};
-
-const editShape = (index) => {
-  const shapeToEdit = savedShapes.value[index];
-    const updatedShape = {
-    ...shapeToEdit,
-    name: 'Forma Editada',
-  };
-  
-  mapShapesStore.updateShape(index, updatedShape);
 };
 
 const deleteShape = (index) => {

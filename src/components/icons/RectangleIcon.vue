@@ -1,0 +1,2 @@
+<template>
+<svg class="fill-current" width="26" height="20" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" xml:space="preserve"><g><g><path d="M497,51H15C6.716,51,0,57.716,0,66v380c0,8.284,6.716,15,15,15h482c8.284,0,15-6.716,15-15V66 C512,57.716,505.284,51,497,51z M482,431H30V81h452V431z"></path></g></g></svg></template>
