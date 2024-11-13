@@ -1,21 +1,26 @@
 <template>
-  <div>
-    <h2>Formas Salvas</h2>
-    <ul>
-      <li v-for="(shape, index) in savedShapes" :key="shape.name">
-        <p><strong>Nome:</strong> {{ shape.name }}</p>
+  <h2>Formas Salvas</h2>
+  <div class="saved-shapes">
+      <div class="shape" v-for="(shape, index) in savedShapes">
         <div class="mini-map" :ref="el => initializeMiniMap(el, shape)"></div>
-        <button @click="plotShape(shape)">Exibir no Mapa Principal</button>
-        <button @click="editShape(index)">Editar Forma</button>
-        <button @click="deleteShape(index)">Excluir Forma</button>
-      </li>
-    </ul>
+        <div class="shape-options">
+          <ButtonTools label="Exibir no mapa" @click="plotShape(shape)">
+            <ShowInMap/>
+          </ButtonTools>
+          <ButtonTools label="Excluir" @click="deleteShape(index)">
+            <DeleteShape/>
+          </ButtonTools>
+        </div>
+      </div>
   </div>
 </template>
 
 <script setup>
 import { computed } from 'vue';
 import { useMapShapesStore } from '@/stores/mapShapes';
+import ButtonTools from './ButtonTools.vue';
+import ShowInMap from './icons/ShowInMapIcon.vue';
+import DeleteShape from './icons/DeleteIcon.vue';
 
 const emit = defineEmits(['plot-shape']);
 const mapShapesStore = useMapShapesStore();
@@ -61,26 +66,37 @@ const plotShape = (shape) => {
   emit('plot-shape', shape);
 };
 
-const editShape = (index) => {
-  const shapeToEdit = savedShapes.value[index];
-    const updatedShape = {
-    ...shapeToEdit,
-    name: 'Forma Editada',
-  };
-  
-  mapShapesStore.updateShape(index, updatedShape);
-};
-
 const deleteShape = (index) => {
   mapShapesStore.removeShape(index);
 };
 </script>
 
-<style>
+<style scoped>
+.saved-shapes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
 .mini-map {
-  width: 200px;
-  height: 150px;
-  margin: 10px 0;
-  border: 1px solid #ddd;
+  width: 300px;
+  height: 100%;
+  border-radius: 5px 0 0 5px;
+}
+
+.shape{
+  display: flex;
+  border-radius: 5px;
+  border: 1px solid #c4c4c4;
+  background-color: #F4F4F5;
+  height: 200px;
+}
+
+.shape-options{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  gap: 10px
 }
 </style>
